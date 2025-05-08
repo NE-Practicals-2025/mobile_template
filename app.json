@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "mobile_template",
-    "slug": "mobile_template",
+    "name": "mobile",
+    "slug": "mobile",
     "version": "1.0.0",
 
     "scheme": "mobile_template",
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
     },
     "plugins": ["expo-router"],
     "experiments": {
@@ -18,12 +18,12 @@
     },
 
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
 
     "userInterfaceStyle": "light",
 
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
