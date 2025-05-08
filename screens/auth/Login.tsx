@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Text,
@@ -46,10 +47,22 @@ export default function LoginScreen() {
     >
       <View className="flex-1 justify-center px-6">
         <View className="mb-8">
-          <Text style={fonts.textBold} className="text-3xl text-gray-900 mb-2">
+          <View className="flex-row items-center gap-2 my-3 justify-center">
+            <Image
+              source={require("~/assets/logo.png")}
+              className="w-16 h-16 mb-2"
+            />
+          </View>
+          <Text
+            style={fonts.textBold}
+            className="text-3xl text-center text-gray-900 mb-2"
+          >
             Welcome Back
           </Text>
-          <Text style={fonts.text} className="text-base text-gray-600">
+          <Text
+            style={fonts.text}
+            className="text-base text-center text-gray-600"
+          >
             Sign in to continue to EventHub
           </Text>
         </View>

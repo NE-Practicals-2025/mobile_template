@@ -3,30 +3,23 @@
     "name": "EventHub",
     "slug": "EventHub",
     "version": "1.0.0",
-
     "scheme": "EventHub",
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/logosm.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true,
-
       "tsconfigPaths": true
     },
 
     "orientation": "portrait",
-    "icon": "./assets/logosm.png",
+    "icon": "./assets/icon.png",
 
     "userInterfaceStyle": "light",
 
-    "splash": {
-      "image": "./assets/logosm.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true

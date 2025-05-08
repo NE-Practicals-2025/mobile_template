@@ -42,42 +42,6 @@ const EventCard = ({ layout = "grid", event, onPress }: EventCardProps) => {
     </View>
   );
 
-  if (layout === "list") {
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        className="flex-row bg-white rounded-xl shadow-sm overflow-hidden mb-4 border border-gray-100"
-      >
-        {renderImage("w-24 h-full")}
-        <View className="flex-1 p-3">
-          <Text style={fonts.textBold} className="text-lg text-gray-900 mb-1">
-            {event.title}
-          </Text>
-          <Text style={fonts.textLight} className="text-sm text-gray-600 mb-2">
-            {event.date} • {event.location}
-          </Text>
-          {event.description && (
-            <Text
-              style={fonts.text}
-              className="text-sm text-gray-700"
-              numberOfLines={2}
-            >
-              {event.description}
-            </Text>
-          )}
-          {event.attendees && (
-            <View className="flex-row items-center mt-2">
-              <View className="w-2 h-2 rounded-full bg-green-500 mr-2" />
-              <Text style={fonts.textLight} className="text-xs text-gray-600">
-                {event.attendees} attending
-              </Text>
-            </View>
-          )}
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
   return (
     <TouchableOpacity
       onPress={onPress}

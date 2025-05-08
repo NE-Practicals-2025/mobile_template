@@ -20,6 +20,7 @@ export default function RegisterScreen() {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     username: "",
+    phone: "",
     email: "",
     password: "",
   });
@@ -61,25 +62,39 @@ export default function RegisterScreen() {
     >
       <View className="flex-1 justify-center px-6">
         <View className="mb-8">
-          <Image
-            source={require("~/assets/logo.png")}
-            className="w-16 h-16 mb-2"
-          />
-          <Text style={fonts.textBold} className="text-3xl text-gray-900 mb-2">
+          <View className="flex-row items-center gap-2 my-3 justify-center">
+            <Image
+              source={require("~/assets/logo.png")}
+              className="w-16 h-16 mb-2"
+            />
+          </View>
+          <Text
+            style={fonts.textBold}
+            className="text-3xl text-center text-gray-900 mb-2"
+          >
             Create Account
           </Text>
-          <Text style={fonts.text} className="text-base text-gray-600">
+          <Text
+            style={fonts.text}
+            className="text-base text-center text-gray-600"
+          >
             Sign up to get started with EventHub
           </Text>
         </View>
 
         <View className="flex flex-col gap-4">
           <FormInput
-            placeholder="Username"
+            placeholder="Names"
             value={formData.username}
             onChangeText={(text) =>
               setFormData({ ...formData, username: text })
             }
+            autoCapitalize="none"
+          />
+          <FormInput
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChangeText={(text) => setFormData({ ...formData, phone: text })}
             autoCapitalize="none"
           />
 

@@ -1,11 +1,8 @@
-import { FontAwesome } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
 
-import { CalendarIcon, PlusIcon } from "~/components/core/icons";
+import { PlusIcon, PostIcon } from "~/components/core/icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Tabs
@@ -23,7 +20,7 @@ export default function TabLayout() {
         options={{
           title: "Events",
           tabBarIcon: ({ color }) => (
-            <CalendarIcon color={color} width={35} height={35} />
+            <PostIcon color={color} width={35} height={35} />
           ),
           tabBarShowLabel: false,
           headerShown: false,

@@ -37,7 +37,7 @@ class AuthService {
   async login(data: LoginData): Promise<AuthResponse> {
     try {
       const response = await UnAuthorizedApi.post(`/auth/login`, data);
-      await this.setToken(response.data.token);
+      await this.setToken(response.data?.data?.token);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -46,7 +46,7 @@ class AuthService {
 
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await UnAuthorizedApi.post(`/auth/register`, data);
+      const response = await UnAuthorizedApi.post(`/user/create`, data);
       await this.setToken(response.data.token);
       return response.data;
     } catch (error) {
