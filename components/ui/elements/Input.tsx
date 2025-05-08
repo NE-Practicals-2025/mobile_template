@@ -34,9 +34,7 @@ const FormInput = (props: IFormInput) => {
     <View className="w-full">
       {/* Input Container */}
       <View
-        className={`relative flex-row items-center w-full rounded-md ${
-          props.errorMessage ? "border border-red-500" : ""
-        }`}
+        className="relative flex-row items-center w-full"
         style={[
           {
             height: height * 0.07,
@@ -56,7 +54,9 @@ const FormInput = (props: IFormInput) => {
           secureTextEntry={props.isPassword && !isShowPassword}
           keyboardType={props.keyboardType || "default"}
           autoCapitalize="none"
-          className="text-lg flex-1 border border-[#807A7A] h-16 my-2 rounded-md"
+          className={`text-lg flex-1 border h-16 my-2 rounded-lg ${
+            props.errorMessage ? "border-red-500" : "border-[#807A7A]"
+          }`}
           style={[
             {
               color: "#1D1D1DA8",

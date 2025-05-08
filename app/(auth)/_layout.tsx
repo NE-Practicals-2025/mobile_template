@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { PaperProvider } from "react-native-paper";
 
 export default function TabLayout() {
   return (
@@ -7,8 +8,10 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="register" />
+      <PaperProvider>
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
+      </PaperProvider>
     </Stack>
   );
 }

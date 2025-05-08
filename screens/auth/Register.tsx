@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
 
-import LoginForm from "~/components/ui/forms/LoginForm";
+import RegisterForm from "~/components/ui/forms/RegisterForm";
 import { fonts } from "~/styles";
 
 const RegisterScreen = () => {
@@ -14,7 +14,7 @@ const RegisterScreen = () => {
       <Text style={fonts.textLight} className="text-sm font-bold">
         Sign in to your account
       </Text>
-      <LoginForm className="w-full mt-4" />
+      <RegisterForm className="w-full mt-4" />
     </View>
   );
 };

@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 
-import { ScreenContent } from "~/components/ScreenContent";
+import { ScreenContent } from "~/components/ui/elements/ScreenContent";
 
 export default function Modal() {
   return (

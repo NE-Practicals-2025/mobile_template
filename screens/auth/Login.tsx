@@ -6,7 +6,7 @@ import { fonts } from "~/styles";
 
 const LoginScreen = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-white p-4">
+    <View className="flex-1 items-center justify-center bg-white p-4 space-y-4 flex flex-col gap-2">
       <Image source={require("../../assets/logo.png")} className="w-20 h-20" />
       <Text style={fonts.textBold} className="text-xl">
         EventHub
