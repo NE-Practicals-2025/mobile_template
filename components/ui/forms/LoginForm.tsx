@@ -1,7 +1,9 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Switch, Text, TouchableOpacity, View } from "react-native";
+
 import FormInput from "../elements/Input";
+
 import useValidate, { ValidationRules } from "~/hooks/useValidate";
 import { fonts } from "~/styles";
 interface ILoginForm {
