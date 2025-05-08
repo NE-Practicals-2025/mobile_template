@@ -1,12 +1,19 @@
 import "../global.css";
 
+import {
+  DefaultTheme,
+  DarkTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-//load DM Sans font in react native expo
-
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { useColorScheme } from "react-native";
 
+import { AuthProvider } from "~/contexts/auth.context";
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
@@ -15,7 +22,7 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  const [loaded, error] = useFonts({
     DMSans: require("../assets/fonts/DM_Sans/static/DMSans_18pt-Regular.ttf"),
     DMSansBold: require("../assets/fonts/DM_Sans/static/DMSans_18pt-Bold.ttf"),
     DMSansLight: require("../assets/fonts/DM_Sans/static/DMSans_18pt-Light.ttf"),
@@ -24,23 +31,31 @@ export default function RootLayout() {
     DMSansThin: require("../assets/fonts/DM_Sans/static/DMSans_18pt-Thin.ttf"),
   });
 
+  const colorScheme = useColorScheme();
+
   useEffect(() => {
-    if (fontsLoaded) {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
-  if (!fontsLoaded) {
+  }, [loaded]);
+
+  if (!loaded) {
     return null;
   }
+
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-    </Stack>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

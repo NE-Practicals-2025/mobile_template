@@ -1,7 +1,5 @@
 import LoginScreen from "~/screens/auth/Login";
 
-const Login = () => {
+export default function Login() {
   return <LoginScreen />;
-};
-
-export default Login;
+}

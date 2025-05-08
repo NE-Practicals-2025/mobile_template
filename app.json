@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "EventHub",
+    "slug": "EventHub",
     "version": "1.0.0",
 
-    "scheme": "mobile_template",
+    "scheme": "EventHub",
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/logo.png"
+      "favicon": "./assets/logosm.png"
     },
     "plugins": ["expo-router"],
     "experiments": {
@@ -18,12 +18,12 @@
     },
 
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/logosm.png",
 
     "userInterfaceStyle": "light",
 
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/logosm.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

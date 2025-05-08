@@ -1,32 +1,43 @@
-import { Link, Tabs } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { useColorScheme } from "react-native";
 
-import { HeaderButton } from "../../components/ui/elements/HeaderButton";
-import { TabBarIcon } from "../../components/ui/elements/TabBarIcon";
+import { CalendarIcon, PlusIcon } from "~/components/core/icons";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "black",
+        headerShown: true,
+        tabBarActiveTintColor: "#007AFF",
+        tabBarStyle: {
+          height: 80,
+          paddingTop: 10,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
+          title: "Events",
+          tabBarIcon: ({ color }) => (
+            <CalendarIcon color={color} width={35} height={35} />
           ),
+          tabBarShowLabel: false,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="add"
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Create",
+          tabBarIcon: ({ color }) => (
+            <PlusIcon color={color} width={35} height={35} />
+          ),
+          tabBarShowLabel: false,
+          headerShown: false,
         }}
       />
     </Tabs>

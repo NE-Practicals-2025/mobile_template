@@ -1,7 +1,5 @@
 import RegisterScreen from "~/screens/auth/Register";
 
-const Register = () => {
+export default function Register() {
   return <RegisterScreen />;
-};
-
-export default Register;
+}

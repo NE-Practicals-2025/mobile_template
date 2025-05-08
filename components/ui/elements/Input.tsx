@@ -1,92 +1,53 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@react-navigation/native";
-import React, { useState } from "react";
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import { fonts } from "~/styles";
 
-interface IFormInput {
-  icon?: React.ReactNode;
-  placeholder?: string;
-  containerStyle?: object;
-  inputStyle?: object;
-  value?: string;
-  secureTextEntry?: boolean;
-  keyboardType?: "default" | "email-address" | "numeric";
-  onChangeText?: (text: string) => void;
-  onBlur?: () => void;
-  placeholderTextColor?: string;
+export interface IFormInput extends React.ComponentProps<typeof TextInput> {
   isPassword?: boolean;
   errorMessage?: string;
 }
 
-const FormInput = (props: IFormInput) => {
-  const { height } = useWindowDimensions();
-  const [isShowPassword, setIsShowPassword] = useState(false);
+const FormInput = ({
+  isPassword,
+  errorMessage,
+  className = "",
+  ...props
+}: IFormInput) => {
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <View className="w-full">
       {/* Input Container */}
       <View
-        className="relative flex-row items-center w-full"
-        style={[
-          {
-            height: height * 0.07,
-          },
-          props.containerStyle,
-        ]}
+        className={`flex-row items-center h-16 bg-gray-50 rounded-xl border border-gray-200 ${className}`}
       >
-        {props.icon}
         <TextInput
-          accessible={false}
-          accessibilityLabel={props.placeholder || "Input field"}
-          value={props.value}
-          onBlur={props.onBlur}
-          onChangeText={props.onChangeText}
-          placeholder={props.placeholder || "Enter text"}
-          placeholderTextColor={props.placeholderTextColor ?? "#1D1D1DA8"}
-          secureTextEntry={props.isPassword && !isShowPassword}
-          keyboardType={props.keyboardType || "default"}
-          autoCapitalize="none"
-          className={`text-lg flex-1 border h-16 my-2 rounded-lg ${
-            props.errorMessage ? "border-red-500" : "border-[#807A7A]"
-          }`}
-          style={[
-            {
-              color: "#1D1D1DA8",
-              fontFamily: "DMSans",
-              paddingLeft: props.icon ? 25 : 20,
-              lineHeight: 19,
-            },
-            props.inputStyle,
-          ]}
+          {...props}
+          style={fonts.text}
+          className="flex-1 px-4  text-base"
+          placeholderTextColor="#9CA3AF"
+          secureTextEntry={isPassword && !showPassword}
         />
-
-        {/* Password Visibility Toggle */}
-        {props.isPassword && (
+        {isPassword && (
           <TouchableOpacity
-            className="absolute right-5"
-            onPress={() => setIsShowPassword(!isShowPassword)}
+            onPress={() => setShowPassword(!showPassword)}
+            className="px-4"
           >
-            {isShowPassword ? (
-              <Ionicons name="eye-off" size={24} color="gray" />
-            ) : (
-              <Ionicons name="eye" size={24} color="gray" />
-            )}
+            <FontAwesome
+              name={showPassword ? "eye" : "eye-slash"}
+              size={20}
+              color="#9CA3AF"
+            />
           </TouchableOpacity>
         )}
       </View>
 
       {/* Error Message Display */}
-      {props.errorMessage && (
-        <Text className="text-[#FF3D00] mt-1 ml-0" style={fonts.textLight}>
-          {props.errorMessage}
+      {errorMessage && (
+        <Text style={fonts.text} className="text-red-500 text-sm mt-1">
+          {errorMessage}
         </Text>
       )}
     </View>

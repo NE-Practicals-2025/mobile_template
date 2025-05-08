@@ -1,22 +1,117 @@
-import React from "react";
-import { Image, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import LoginForm from "~/components/ui/forms/LoginForm";
+import FormInput from "~/components/ui/elements/Input";
+import { useAuth } from "~/contexts/auth.context";
 import { fonts } from "~/styles";
 
-const LoginScreen = () => {
-  return (
-    <View className="flex-1 items-center justify-center bg-white p-4 space-y-4 flex flex-col gap-2">
-      <Image source={require("../../assets/logo.png")} className="w-20 h-20" />
-      <Text style={fonts.textBold} className="text-xl">
-        EventHub
-      </Text>
-      <Text style={fonts.textLight} className="text-sm font-bold">
-        Sign in to your account
-      </Text>
-      <LoginForm className="w-full mt-4" />
-    </View>
-  );
-};
+export default function LoginScreen() {
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-export default LoginScreen;
+  const handleLogin = async () => {
+    if (!formData.email || !formData.password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError("");
+      await login(formData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-white"
+    >
+      <View className="flex-1 justify-center px-6">
+        <View className="mb-8">
+          <Text style={fonts.textBold} className="text-3xl text-gray-900 mb-2">
+            Welcome Back
+          </Text>
+          <Text style={fonts.text} className="text-base text-gray-600">
+            Sign in to continue to EventHub
+          </Text>
+        </View>
+
+        <View className="space-y-4">
+          <FormInput
+            placeholder="Email"
+            value={formData.email}
+            onChangeText={(text) => setFormData({ ...formData, email: text })}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            className="my-2"
+          />
+
+          <FormInput
+            placeholder="Password"
+            value={formData.password}
+            onChangeText={(text) =>
+              setFormData({ ...formData, password: text })
+            }
+            className="my-2"
+            secureTextEntry
+            isPassword
+          />
+
+          {error ? (
+            <Text style={fonts.text} className="text-red-500 text-sm mb-2">
+              {error}
+            </Text>
+          ) : null}
+
+          <TouchableOpacity
+            className="bg-primary rounded-xl py-4 px-6"
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text
+                style={fonts.textBold}
+                className="text-white text-center text-lg"
+              >
+                Sign In
+              </Text>
+            )}
+          </TouchableOpacity>
+
+          <View className="flex-row justify-center mt-4">
+            <Text style={fonts.text} className="text-gray-600">
+              Don't have an account?{" "}
+            </Text>
+            <Link href="/(auth)/register" asChild>
+              <TouchableOpacity>
+                <Text style={fonts.textBold} className="text-primary">
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
+}
