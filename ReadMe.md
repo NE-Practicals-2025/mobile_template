@@ -1,4 +1,4 @@
-# EventHub - Expo Router Template
+# EventHub - NE Mobile Template
 
 Welcome to the NE Mobile template! This is a starter template built with Expo Router to help you quickly finish your mobile NE. Here's how to get started:
 
