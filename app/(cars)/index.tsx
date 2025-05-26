@@ -23,18 +23,25 @@ export default function CarsScreen() {
   };
 
   const filteredCars = cars?.filter((car) =>
-    car?.model?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
-    car?.brand?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+    car.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    car.brand.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderHeader = () => (
     <View className="p-4 bg-white">
+      <View className="flex-row items-center mb-4">
+        <Ionicons 
+          name="arrow-back" 
+          size={24} 
+          color="black" 
+          onPress={() => router.back()}
+        />
+      </View>
       <SearchBar
         value={searchQuery}
         onChangeText={setSearchQuery}
         onFilterPress={() => console.log("Filter pressed")}
         placeholder="Search by brand or model..."
-        
       />
     </View>
   );
@@ -67,4 +74,4 @@ export default function CarsScreen() {
       />
     </SafeAreaView>
   );
-}
+} 

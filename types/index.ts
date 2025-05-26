@@ -40,3 +40,30 @@ export interface IPaginatedQuery {
   sort?: string;
   filter?: string;
 }
+
+export interface IBrand {
+  id: string;
+  name: string;
+  logo: string;
+}
+
+export interface ICar {
+  id: string;
+  brand: string;
+  model: string;
+  price: string;
+  numberOfSeats: string;
+  availableFrom: string;
+  photo: string;
+  createdAt: string;
+  rating?: number;
+}
+
+export interface IBooking {
+  id: string;
+  carId: string;
+  userId: string;
+  from: Date;
+  to: Date;
+  createdAt: string;
+}
