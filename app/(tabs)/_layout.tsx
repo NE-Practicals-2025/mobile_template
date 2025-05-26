@@ -1,40 +1,63 @@
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
-import { PlusIcon, PostIcon } from "~/components/core/icons";
-
 export default function TabLayout() {
-
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
-        tabBarActiveTintColor: "#007AFF",
+        headerShown: false,
+        tabBarActiveTintColor: "#4CAF50",
+        tabBarInactiveTintColor: "#757575",
         tabBarStyle: {
           height: 80,
           paddingTop: 10,
+          backgroundColor: "#000000",
+          borderTopWidth: 0,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginBottom: 10,
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="cars"
         options={{
-          title: "Events",
+          title: "Cars",
           tabBarIcon: ({ color }) => (
-            <PostIcon color={color} width={35} height={35} />
+            <MaterialCommunityIcons
+              name="road-variant"
+              size={24}
+              color={color}
+            />
           ),
-          tabBarShowLabel: false,
-          headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="add"
+        name="index"
         options={{
-          title: "Create",
+          title: "Home",
           tabBarIcon: ({ color }) => (
-            <PlusIcon color={color} width={35} height={35} />
+            <MaterialCommunityIcons name="leaf" size={32} color={color} />
           ),
-          tabBarShowLabel: false,
-          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="bookings"
+        options={{
+          title: "Bookings",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="heart-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person-outline" size={24} color={color} />
+          ),
         }}
       />
     </Tabs>

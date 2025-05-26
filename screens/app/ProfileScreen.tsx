@@ -1,18 +1,28 @@
 import { FontAwesome } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 
 import { UserIcon } from "~/components/core/icons";
 import { useAuth } from "~/contexts/auth.context";
-import useGet from "~/hooks/useGet";
 import { fonts } from "~/styles";
-
 export default function ProfileScreen() {
   const { logout } = useAuth();
-  const { data } = useGet<any>("/user/me");
-  const user = data?.user;
-  console.log("data --> ", data);
+  const [user, setUser] = React.useState<any>({});
+  const [, setToken] = React.useState<any>({});
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const userData = await SecureStore.getItemAsync("user");
+      const tokenData = await SecureStore.getItemAsync("token");
+      if (userData) setUser(JSON.parse(userData));
+      if (tokenData) setToken(JSON.parse(tokenData));
+    };
+    fetchData();
+  }, []);
+
+  console.log("user --> ", user);
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       {
@@ -43,10 +53,13 @@ export default function ProfileScreen() {
         </View>
         <View className="items-center mt-4 px-6">
           <Text style={fonts.textBold} className="text-2xl text-white">
-            {user?.names}
+            {user?.username}
           </Text>
           <Text style={fonts.text} className="text-black mt-1">
             {user?.email}
+          </Text>
+          <Text style={fonts.text} className="text-black mt-1">
+            {user?.phone}
           </Text>
         </View>
       </View>

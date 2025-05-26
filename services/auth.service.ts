@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-import { UnAuthorizedApi } from "~/lib/api";
-
+import { getUsers } from "./index.service";
+import { UsersApi } from "~/lib/api";
 export interface AuthResponse {
   token: string;
   user: {
@@ -23,7 +23,7 @@ export interface RegisterData extends LoginData {
 
 class AuthService {
   private static instance: AuthService;
-  private token: string | null = null;
+  private email: string | null = null;
 
   private constructor() {}
 
@@ -36,9 +36,15 @@ class AuthService {
 
   async login(data: LoginData): Promise<AuthResponse> {
     try {
-      const response = await UnAuthorizedApi.post(`/auth/login`, data);
-      await this.setToken(response.data?.data?.token);
-      return response.data;
+      const users = await getUsers();
+      console.log("users", users);
+      const user = users.data.find((user: any) => user.email === data.email);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      await SecureStore.setItemAsync("user", JSON.stringify(user));
+      await SecureStore.setItemAsync("token", JSON.stringify(user.email));
+      return user;
     } catch (error) {
       throw this.handleError(error);
     }
@@ -46,35 +52,37 @@ class AuthService {
 
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await UnAuthorizedApi.post(`/user/create`, data);
-      await this.setToken(response.data.token);
-      return response.data;
+      const response = await UsersApi.post(`/`, data);
+      console.log("response", response?.data);
+      // await this.setToken(response.data.token);
+      return response?.data;
     } catch (error) {
       throw this.handleError(error);
     }
   }
 
   async logout(): Promise<void> {
-    await SecureStore.deleteItemAsync("accessToken");
-    this.token = null;
+    await SecureStore.deleteItemAsync("user");
+    await SecureStore.deleteItemAsync("token");
+    this.email = null;
   }
 
   async isAuthenticated(): Promise<boolean> {
-    const token = await this.getToken();
+    const token = await this.getEmail();
     return !!token;
   }
 
-  async getToken(): Promise<string | null> {
-    if (this.token) return this.token;
+  async getEmail(): Promise<string | null> {
+    if (this.email) return this.email;
 
-    const token = await SecureStore.getItemAsync("accessToken");
-    if (token) this.token = token;
+    const token = await SecureStore.getItemAsync("token");
+    if (token) this.email = token;
     return token;
   }
 
   private async setToken(token: string): Promise<void> {
-    await SecureStore.setItemAsync("accessToken", token);
-    this.token = token;
+    await SecureStore.setItemAsync("token", token);
+    this.email = token;
   }
 
   private handleError(error: any): Error {

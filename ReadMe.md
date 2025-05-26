@@ -3,6 +3,7 @@
 Welcome to the NE Mobile template! This is a starter template built with Expo Router to help you quickly finish your mobile NE. Here's how to get started:
 
 ## Features
+
 - Expo Router for navigation
 - Pre-configured tab navigation
 - Integrated Auth (Login & Sign up + Logout)
@@ -58,44 +59,59 @@ Welcome to the NE Mobile template! This is a starter template built with Expo Ro
 ## Directory Details
 
 ### `/app`
+
 Contains all the routes and screens using Expo Router's file-based routing:
+
 - `(auth)`: Login and registration screens
 - `(tabs)`: Main app tabs including home, profile, etc.
 - `_layout.tsx`: Root layout with authentication and theme providers
 
 ### `/components`
+
 Reusable UI components organized by complexity:
+
 - `core`: Basic UI elements like icons and buttons
 - `ui`: More complex components like forms and cards
 
 ### `/contexts`
+
 React Context providers:
+
 - `auth.context.tsx`: Manages authentication state and user information
 - Provides login, register, and logout functionality
 
 ### `/hooks`
+
 Custom React hooks:
+
 - `useGet`: Hook for making GET requests to the API
 - Other utility hooks for common functionality
 
 ### `/lib`
+
 Utility libraries and configurations:
+
 - `api.ts`: Axios instance setup and API configurations
 - Other helper functions and utilities
 
 ### `/services`
+
 Business logic and API services:
+
 - `auth.service.ts`: Handles authentication operations
 - Token management and storage
 
 ### `/styles`
+
 Global styles and theme configuration:
+
 - Tailwind CSS configuration
 - Custom fonts and colors
 
 ## Authentication
 
 The template includes a complete authentication system:
+
 - Secure token storage using expo-secure-store
 - Protected routes
 - Login and registration forms with validation
@@ -104,6 +120,7 @@ The template includes a complete authentication system:
 ## API Integration
 
 Built-in API integration features:
+
 - Axios-based API client
 - Authentication token management
 - Error handling
