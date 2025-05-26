@@ -22,18 +22,19 @@ export default function CarsScreen() {
     console.log("Toggle favorite for car:", car.id);
   };
 
-  const filteredCars = cars?.filter((car) =>
-    car.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    car.brand.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCars = cars?.filter(
+    (car) =>
+      car.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      car.brand.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const renderHeader = () => (
     <View className="p-4 bg-white">
       <View className="flex-row items-center mb-4">
-        <Ionicons 
-          name="arrow-back" 
-          size={24} 
-          color="black" 
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color="black"
           onPress={() => router.back()}
         />
       </View>
@@ -74,4 +75,4 @@ export default function CarsScreen() {
       />
     </SafeAreaView>
   );
-} 
+}

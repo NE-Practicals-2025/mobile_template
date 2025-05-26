@@ -22,9 +22,10 @@ export default function CarsScreen() {
     console.log("Toggle favorite for car:", car.id);
   };
 
-  const filteredCars = cars?.filter((car) =>
-    car?.model?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
-    car?.brand?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+  const filteredCars = cars?.filter(
+    (car) =>
+      car?.model?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+      car?.brand?.toLowerCase()?.includes(searchQuery?.toLowerCase()),
   );
 
   const renderHeader = () => (
@@ -34,7 +35,6 @@ export default function CarsScreen() {
         onChangeText={setSearchQuery}
         onFilterPress={() => console.log("Filter pressed")}
         placeholder="Search by brand or model..."
-        
       />
     </View>
   );
