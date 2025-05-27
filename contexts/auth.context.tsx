@@ -1,117 +1,68 @@
-import { useRouter, useSegments } from "expo-router";
-import { createContext, useContext, useEffect, useState } from "react";
-
-import AuthService, {
-  AuthResponse,
-  LoginData,
-  RegisterData,
-} from "~/services/auth.service";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import { User } from '../types';
 
 interface AuthContextType {
-  isAuthenticated: boolean;
+  user: User | null;
   isLoading: boolean;
-  user: AuthResponse["user"] | null;
-  login: (data: LoginData) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
+  login: (user: User) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// This hook can be used to access the user info.
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
-// This hook will protect the route access based on user authentication.
-function useProtectedRoute(isAuthenticated: boolean) {
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    const inAuthGroup = segments[0] === "(auth)";
-
-    if (
-      // If the user is not signed in and the initial segment is not anything in the auth group.
-      !isAuthenticated &&
-      !inAuthGroup
-    ) {
-      // Redirect to the sign-in page.
-      router.replace("/(auth)/login");
-    } else if (isAuthenticated && inAuthGroup) {
-      // Redirect away from the sign-in page.
-      router.replace("/(tabs)");
-    }
-  }, [isAuthenticated, segments]);
-}
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<AuthResponse["user"] | null>(null);
-
-  useProtectedRoute(isAuthenticated);
 
   useEffect(() => {
-    checkAuth();
+    loadUser();
   }, []);
 
-  const checkAuth = async () => {
+  const loadUser = async () => {
     try {
-      const isAuth = await AuthService.isAuthenticated();
-      setIsAuthenticated(isAuth);
+      const userJson = await SecureStore.getItemAsync('user');
+      if (userJson) {
+        setUser(JSON.parse(userJson));
+      }
     } catch (error) {
-      console.error("Auth check failed:", error);
+      console.error('Error loading user:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const login = async (data: LoginData) => {
+  const login = async (userData: User) => {
     try {
-      const response = await AuthService.login(data);
-      setUser(response.user);
-      setIsAuthenticated(true);
+      await SecureStore.setItemAsync('user', JSON.stringify(userData));
+      setUser(userData);
     } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    }
-  };
-
-  const register = async (data: RegisterData) => {
-    try {
-      const response = await AuthService.register(data);
-      setUser(response.user);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error("Registration failed:", error);
+      console.error('Error saving user:', error);
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await AuthService.logout();
+      await SecureStore.deleteItemAsync('user');
       setUser(null);
-      setIsAuthenticated(false);
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Error removing user:', error);
       throw error;
     }
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        isLoading,
-        user,
-        login,
-        register,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}; 

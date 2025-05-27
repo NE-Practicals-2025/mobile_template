@@ -10,7 +10,6 @@ export default function TabLayout() {
     >
       <PaperProvider>
         <Stack.Screen name="login" />
-        <Stack.Screen name="register" />
       </PaperProvider>
     </Stack>
   );

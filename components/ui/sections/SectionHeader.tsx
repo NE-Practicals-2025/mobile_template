@@ -11,7 +11,7 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-xl font-bold">{title}</Text>
+      <Text className="text-xl">{title}</Text>
       <TouchableOpacity onPress={onViewAllPress}>
         <Text className="text-gray-500">View All</Text>
       </TouchableOpacity>

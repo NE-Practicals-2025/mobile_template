@@ -16,7 +16,7 @@ export default function HomeHeader({
   return (
     <View className="flex-row items-center justify-between mb-6">
       <View className="flex-1">
-        <Text className="text-xl font-bold mt-2">Rent a Car anytime</Text>
+        <Text className="text-xl mt-2">Rent a Car anytime</Text>
       </View>
 
       <View className="flex-row items-center gap-3">

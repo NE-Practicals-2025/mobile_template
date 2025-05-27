@@ -10,7 +10,7 @@ export default function BrandsList({ brands, onBrandPress }: BrandsListProps) {
   return (
     <View className="mb-6">
       <View className="flex-row justify-between items-center mb-4">
-        <Text className="text-xl font-bold">Top Brands</Text>
+        <Text className="text-xl">Top Brands</Text>
         <TouchableOpacity>
           <Text className="text-gray-500">View All</Text>
         </TouchableOpacity>

@@ -21,33 +21,20 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="cars"
-        options={{
-          title: "Cars",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="road-variant"
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="leaf" size={32} color={color} />
+            <MaterialCommunityIcons name="home" size={32} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="bookings"
+        name="expenses"
         options={{
-          title: "Bookings",
+          title: "Expenses",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="heart-outline" size={24} color={color} />
+            <MaterialCommunityIcons name="leaf" size={32} color={color} />
           ),
         }}
       />

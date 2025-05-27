@@ -41,7 +41,7 @@ export default function CarCard({
 
       <View className="p-4">
         <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-lg font-bold">{car.model}</Text>
+          <Text className="text-lg">{car.model}</Text>
           <View className="flex-row items-center">
             <Ionicons name="star" size={16} color="#FFD700" />
             <Text className="ml-1 font-medium">5.00</Text>
@@ -59,7 +59,7 @@ export default function CarCard({
               {Math.floor(Math.random() * 10) + 1} Seats
             </Text>
           </View>
-          <Text className="font-bold">${car.price}/hour</Text>
+          <Text className="">${car.price}/hour</Text>
         </View>
       </View>
     </TouchableOpacity>

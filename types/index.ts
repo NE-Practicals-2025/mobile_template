@@ -67,3 +67,29 @@ export interface IBooking {
   to: Date;
   createdAt: string;
 }
+
+export interface User {
+  id: string;
+  username: string;
+  password: string;
+  name: string;
+}
+
+export interface Expense {
+  id: string;
+  name: string;
+  amount: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface CreateExpenseData {
+  name: string;
+  amount: string;
+  description: string;
+}

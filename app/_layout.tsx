@@ -11,7 +11,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 
-import { AuthProvider } from "~/contexts/auth.context";
+import { AuthProvider, useAuth } from "~/contexts/auth.context";
+import { router, useSegments } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,6 +22,46 @@ export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(auth)",
 };
+
+function RootLayoutNav() {
+  const { user, isLoading } = useAuth();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(auth)';
+
+    if (!user && !inAuthGroup) {
+      router.replace('/login');
+    } else if (user && inAuthGroup) {
+      router.replace('/(tabs)');
+    }
+  }, [user, segments, isLoading]);
+
+  return (
+    <Stack>
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="expense/[id]"
+        options={{
+          title: 'Expense Details',
+          headerBackTitle: 'Back',
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="expense/new"
+        options={{
+          title: '',
+          headerBackTitle: 'Back',
+          headerShown: false
+        }}
+      />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -49,17 +91,8 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(cars)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", headerShown: false }}
-          />
-        </Stack>
-      </ThemeProvider>
+      <RootLayoutNav />
+      <Toast />
     </AuthProvider>
   );
 }

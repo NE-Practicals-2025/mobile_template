@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { RelativePathString, useRouter } from "expo-router";
 import { useState } from "react";
 import { Switch, Text, TouchableOpacity, View } from "react-native";
 
@@ -92,15 +92,15 @@ const LoginForm = ({ className }: ILoginForm) => {
       >
         <Text
           style={fonts.textBold}
-          className="text-lg text-center text-white font-bold"
+          className="text-lg text-center text-white"
         >
           Login
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigate.push("/(auth)/register")}>
+      <TouchableOpacity onPress={() => navigate.push("/(auth)/register" as RelativePathString)}>
         <Text
           style={fonts.textLight}
-          className="text-base text-center font-bold"
+          className="text-base text-center"
         >
           Don't have an account? Sign up
         </Text>

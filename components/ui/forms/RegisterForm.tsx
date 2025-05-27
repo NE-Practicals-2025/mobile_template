@@ -105,7 +105,7 @@ const RegisterForm = ({ className }: IRegisterForm) => {
       >
         <Text
           style={fonts.textBold}
-          className="text-lg text-center text-white font-bold"
+          className="text-lg text-center text-white"
         >
           Register
         </Text>
@@ -113,7 +113,7 @@ const RegisterForm = ({ className }: IRegisterForm) => {
       <TouchableOpacity onPress={() => navigate.push("/(auth)/login")}>
         <Text
           style={fonts.textLight}
-          className="text-base text-center font-bold"
+          className="text-base text-center"
         >
           Already have an account? Login
         </Text>
