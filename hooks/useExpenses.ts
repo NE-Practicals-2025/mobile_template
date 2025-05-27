@@ -4,7 +4,7 @@ import { Expense, CreateExpenseData } from '../types';
 import Toast from 'react-native-toast-message';
 import { AxiosError } from 'axios';
 
-const useExpenses = () => {
+const useExpenses = (searchQuery?: string) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,30 +13,19 @@ const useExpenses = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await expenseService.getAllExpenses();
+      const data = await expenseService.getAllExpenses(searchQuery);
       setExpenses(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch expenses');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [searchQuery]);
 
-  // Initial fetch of expenses
+  // Fetch expenses when search query changes
   useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        const data = await expenseService.getAllExpenses();
-        setExpenses(data);
-      } catch (err) {
-        setError('Failed to fetch expenses');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExpenses();
-  }, []); // Empty dependency array means this runs only once on mount
+    refetchExpenses();
+  }, [searchQuery, refetchExpenses]);
 
   // Create new expense
   const createExpense = async (expenseData: CreateExpenseData): Promise<Expense> => {
@@ -81,11 +70,11 @@ const useExpenses = () => {
       );
       return expense;
     } catch (err) {
-        Toast.show({
-            type: 'error',
-            text1: 'Failed to fetch expense details',
-            text2: (err as Error).message
-        })
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to fetch expense details',
+        text2: (err as Error).message
+      });
       throw err;
     } finally {
       setLoading(false);

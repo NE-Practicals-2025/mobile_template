@@ -1,20 +1,30 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { RelativePathString, router } from 'expo-router';
 import { Expense } from '../../types';
 import useExpenses from '../../hooks/useExpenses';
 import { Ionicons } from '@expo/vector-icons';
 import { fonts } from '../../styles';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function ExpensesScreen() {
-  const { expenses, loading, error, deleteExpense, refetchExpenses } = useExpenses();
+  const [searchQuery, setSearchQuery] = useState('');
+  const { expenses, loading, error, deleteExpense, refetchExpenses } = useExpenses(searchQuery);
 
   const handleDeleteExpense = async (expenseId: string) => {
     try {
       await deleteExpense(expenseId);
       // Show success toast
+      Toast.show({
+        text1: 'Expense deleted successfully',
+        type: 'success',
+      });
     } catch (error) {
       // Show error toast
+      Toast.show({
+        text1: 'Failed to delete expense',
+        type: 'error',
+      });
     }
   };
 
@@ -60,7 +70,7 @@ export default function ExpensesScreen() {
     <View className="flex-1 bg-gray-50">
       {/* Header */}
       <View className="bg-white px-6 pt-12 pb-4 shadow-sm">
-        <View className="flex-row justify-between items-center">
+        <View className="flex-row justify-between items-center mb-4">
           <View>
             <Text style={fonts.textBold} className="text-2xl text-gray-800">Expenses</Text>
             <Text style={fonts.text} className="text-gray-500">Track your spending</Text>
@@ -80,6 +90,23 @@ export default function ExpensesScreen() {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Search Bar */}
+        <View className="flex-row items-center bg-gray-50 rounded-xl px-4 py-2 mb-2">
+          <Ionicons name="search" size={20} color="#9CA3AF" />
+          <TextInput
+            className="flex-1 ml-2 text-gray-800"
+            placeholder="Search expenses..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            style={fonts.text}
+          />
+          {searchQuery ? (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+            </TouchableOpacity>
+          ) : null}
+        </View>
       </View>
 
       {/* Content */}
@@ -91,9 +118,15 @@ export default function ExpensesScreen() {
         ) : expenses.length === 0 ? (
           <View className="flex-1 items-center justify-center">
             <View className="bg-white p-6 rounded-2xl shadow-sm items-center">
-              <Ionicons name="wallet-outline" size={48} color="#9CA3AF" />
+              <Ionicons 
+                name={searchQuery ? "search-outline" : "wallet-outline"} 
+                size={48} 
+                color="#9CA3AF" 
+              />
               <Text style={fonts.textMedium} className="text-gray-500 mt-4 text-center">
-                No expenses yet. Add your first expense!
+                {searchQuery 
+                  ? "No expenses found matching your search"
+                  : "No expenses yet. Add your first expense!"}
               </Text>
             </View>
           </View>

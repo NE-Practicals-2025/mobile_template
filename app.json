@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "EventHub",
-    "slug": "EventHub",
+    "name": "Finance Tracker",
+    "slug": "Finance Tracker",
     "version": "1.0.0",
-    "scheme": "EventHub",
+    "scheme": "Finance Tracker",
     "web": {
       "bundler": "metro",
       "output": "static",

@@ -1,47 +1,80 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { router } from 'expo-router';
-import useExpenses from '../../hooks/useExpenses';
 import { Ionicons } from '@expo/vector-icons';
-import { fonts } from '../../styles';
+import { fonts } from '~/styles';
+import useExpenses from '../../hooks/useExpenses';
+import useValidate, { ValidationRules } from '~/hooks/useValidate';
 import Toast from 'react-native-toast-message';
 
 export default function NewExpenseScreen() {
   const { createExpense } = useExpenses();
-  const [amount, setAmount] = useState('');
   const [name, setName] = useState('');
+  const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({ name: '', amount: '', description: '' });
+  const { validate } = useValidate();
+
+  const validationSchema: ValidationRules = {
+    name: {
+      type: "string",
+      required: true,
+      message: "Name is required"
+    },
+    amount: {
+      type: "string",
+      required: true,
+      pattern: /^\d+(\.\d{1,2})?$/,
+      message: "Please enter a valid amount (e.g. 10.50)"
+    },
+    description: {
+      type: "string",
+      required: true,
+      minLength: 3,
+      message: "Description must be at least 3 characters"
+    }
+  };
+
+  const validateField = (name: string, value: string) => {
+    const fieldSchema = { [name]: validationSchema[name] };
+    const fieldData = { [name]: value };
+    const { errors } = validate(fieldData, fieldSchema);
+    setErrors(prev => ({
+      ...prev,
+      [name]: errors[name] || ""
+    }));
+  };
 
   const handleSubmit = async () => {
-    if (!amount || !name || !description) {
-      // Show toast here
+    const { isValid, errors } = validate({ name, amount, description }, validationSchema);
+    setErrors({
+      name: errors.name || '',
+      amount: errors.amount || '',
+      description: errors.description || ''
+    });
+
+    if (!isValid) {
       return;
     }
 
-    const amountNumber = parseFloat(amount);
-    if (isNaN(amountNumber) || amountNumber <= 0) {
-      // Show toast here
-      return;
-    }
-
-    setIsLoading(true);
     try {
       await createExpense({
         name,
-        amount: amountNumber.toString(),
-        description,
+        amount: parseFloat(amount).toString(),
+        description
       });
-      // Show success toast here
       Toast.show({
-        
-      })
+        type: 'success',
+        text1: 'Success',
+        text2: 'Expense created successfully'
+      });
       router.back();
     } catch (error) {
-      //toast
-      
-    } finally {
-      setIsLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error instanceof Error ? error.message : 'Failed to create expense'
+      });
     }
   };
 
@@ -74,10 +107,16 @@ export default function NewExpenseScreen() {
                     className="flex-1 p-4 text-gray-800"
                     placeholder="Enter expense name"
                     value={name}
-                    onChangeText={setName}
+                    onChangeText={(text) => {
+                      setName(text);
+                      validateField('name', text);
+                    }}
                     style={fonts.text}
                   />
                 </View>
+                {errors.name ? (
+                  <Text style={fonts.text} className="text-red-500 text-sm mt-1">{errors.name}</Text>
+                ) : null}
               </View>
 
               {/* Amount Input */}
@@ -89,11 +128,17 @@ export default function NewExpenseScreen() {
                     className="flex-1 p-4 text-gray-800"
                     placeholder="Enter amount"
                     value={amount}
-                    onChangeText={setAmount}
+                    onChangeText={(text) => {
+                      setAmount(text);
+                      validateField('amount', text);
+                    }}
                     keyboardType="decimal-pad"
                     style={fonts.text}
                   />
                 </View>
+                {errors.amount ? (
+                  <Text style={fonts.text} className="text-red-500 text-sm mt-1">{errors.amount}</Text>
+                ) : null}
               </View>
 
               {/* Description Input */}
@@ -105,38 +150,31 @@ export default function NewExpenseScreen() {
                     className="flex-1 p-4 text-gray-800"
                     placeholder="Enter description"
                     value={description}
-                    onChangeText={setDescription}
+                    onChangeText={(text) => {
+                      setDescription(text);
+                      validateField('description', text);
+                    }}
                     multiline
                     numberOfLines={4}
                     textAlignVertical="top"
                     style={[fonts.text, { height: 100 }]}
                   />
                 </View>
+                {errors.description ? (
+                  <Text style={fonts.text} className="text-red-500 text-sm mt-1">{errors.description}</Text>
+                ) : null}
               </View>
             </View>
           </View>
 
           {/* Submit Button */}
           <TouchableOpacity
-            className="bg-blue-500 rounded-2xl p-4 mt-6 flex-row items-center justify-center"
+            className="bg-blue-500 p-4 rounded-xl mt-6"
             onPress={handleSubmit}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <View className="flex-row items-center">
-                <Ionicons name="sync" size={20} color="white" className="animate-spin" />
-                <Text style={fonts.textSemiBold} className="text-white text-lg ml-2">
-                  Creating...
-                </Text>
-              </View>
-            ) : (
-              <View className="flex-row items-center">
-                <Ionicons name="add-circle-outline" size={24} color="white" />
-                <Text style={fonts.textSemiBold} className="text-white text-lg ml-2">
-                  Create Expense
-                </Text>
-              </View>
-            )}
+            <Text style={fonts.textSemiBold} className="text-white text-center font-semibold text-lg">
+              Create Expense
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -88,6 +88,11 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterData {
+  email: string;
+  password: string;
+}
+
 export interface CreateExpenseData {
   name: string;
   amount: string;

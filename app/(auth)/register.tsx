@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { authService } from '../../services/api';
-import { useAuth } from '../../contexts/auth.context';
 import Toast from 'react-native-toast-message';
 import { fonts } from '~/styles';
 import useValidate, { ValidationRules } from '~/hooks/useValidate';
 
-export default function LoginScreen() {
-  const [username, setUsername] = useState('');
+export default function RegisterScreen() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({ username: '', password: '' });
-  const { login } = useAuth();
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  });
   const { validate } = useValidate();
 
   const validationSchema: ValidationRules = {
-    username: {
+    email: {
       type: "email",
       required: true,
       message: "Please enter a valid email address"
@@ -26,7 +27,7 @@ export default function LoginScreen() {
       required: true,
       minLength: 6,
       message: "Password must be at least 6 characters"
-    }
+    },
   };
 
   const validateField = (name: string, value: string) => {
@@ -39,11 +40,15 @@ export default function LoginScreen() {
     }));
   };
 
-  const handleLogin = async () => {
-    const { isValid, errors } = validate({ username, password }, validationSchema);
+  const handleRegister = async () => {
+
+    const { isValid, errors } = validate(
+      { email, password },
+      validationSchema
+    );
     setErrors({
-      username: errors.username || '',
-      password: errors.password || ''
+      email: errors.email || '',
+      password: errors.password || '',
     });
 
     if (!isValid) {
@@ -52,14 +57,18 @@ export default function LoginScreen() {
 
     setIsLoading(true);
     try {
-      const user = await authService.login({ username, password });
-      await login(user);
-      router.replace('/(tabs)');
+      await authService.register({ email, password });
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Registration successful! Please login.'
+      });
+      router.replace('/(auth)/login');
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Login failed',
-        text2: error instanceof Error ? error.message : 'Login failed',
+        text1: 'Registration failed',
+        text2: error instanceof Error ? error.message : 'Registration failed',
       });
     } finally {
       setIsLoading(false);
@@ -78,29 +87,29 @@ export default function LoginScreen() {
             <Text style={fonts.textBold} className="text-3xl text-blue-500">$</Text>
           </View>
           <Text style={fonts.textBold} className="text-3xl text-white mb-2">Finance Tracker</Text>
-          <Text style={fonts.textLight} className="text-white/80">Track your expenses with ease</Text>
+          <Text style={fonts.textLight} className="text-white/80">Create your account</Text>
         </View>
 
-        {/* Login Card */}
+        {/* Register Card */}
         <View className="bg-white rounded-2xl p-6 shadow-lg">
-          <Text style={fonts.textSemiBold} className="text-2xl text-gray-800 mb-6">Welcome Back</Text>
+          <Text style={fonts.textSemiBold} className="text-2xl text-gray-800 mb-6">Sign Up</Text>
 
           <View className="space-y-4">
             <View>
-              <Text style={fonts.textLight} className="text-gray-600 mb-2">Username</Text>
+              <Text style={fonts.textLight} className="text-gray-600 mb-2">Email</Text>
               <TextInput
                 className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800"
-                placeholder="Enter your username"
-                value={username}
+                placeholder="Enter your email"
+                value={email}
                 onChangeText={(text) => {
-                  setUsername(text);
-                  validateField('username', text);
+                  setEmail(text);
+                  validateField('email', text);
                 }}
                 autoCapitalize="none"
                 keyboardType="email-address"
               />
-              {errors.username ? (
-                <Text style={fonts.text} className="text-red-500 text-sm mt-1">{errors.username}</Text>
+              {errors.email ? (
+                <Text style={fonts.text} className="text-red-500 text-sm mt-1">{errors.email}</Text>
               ) : null}
             </View>
 
@@ -123,25 +132,25 @@ export default function LoginScreen() {
 
             <TouchableOpacity
               className="bg-blue-500 p-4 rounded-xl mt-6"
-              onPress={handleLogin}
+              onPress={handleRegister}
               disabled={isLoading}
             >
               <Text style={fonts.textSemiBold} className="text-white text-center font-semibold text-lg">
-                {isLoading ? 'Logging in...' : 'Login'}
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </Text>
             </TouchableOpacity>
 
-            {/* <TouchableOpacity
-              onPress={() => router.push('/(auth)/register')}
+            <TouchableOpacity
+              onPress={() => router.push('/(auth)/login')}
               className="mt-4"
             >
               <Text style={fonts.textLight} className="text-center text-gray-600">
-                Don't have an account? Register
+                Already have an account? Login
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     </View>
   );
-}
+} 
